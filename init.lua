@@ -79,7 +79,7 @@ end
 --dofile(minetest.get_modpath("anticheat").."/anticheat_source.lua")
 
 local anticheat_routines=loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
-check_noclip, check_fly, check_player = anticheat_routines(minetest,cheat,CHECK_AGAIN);
+check_noclip, check_fly, check_player = anticheat_routines(minetest,cheat,CHECK_AGAIN,punish_cheat);
 	
 
 minetest.register_globalstep(function(dtime)

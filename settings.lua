@@ -25,6 +25,7 @@ anticheatsettings.CHECK_AGAIN = 15; -- after player found in bad position check 
 -- moderators list, those players can use cheat debug and will see full cheat message
 anticheatsettings.moderators = {
 ["rnd"]=true,
+["rnd1"]=true,
 ["maikerumine"]=true,
 ["sorcerykid"]=true,
 ["Zorg"]=true,
