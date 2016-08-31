@@ -30,6 +30,7 @@ anticheatsettings.moderators = {
 ["sorcerykid"]=true,
 ["Zorg"]=true,
 ["AspireMint"]=true,
-["843jdc"]=true
+["843jdc"]=true,
+["Fixer"] = true,
 }
 -- END OF SETTINGS --------------------------------------------------------
