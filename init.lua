@@ -28,6 +28,7 @@ cheat.moderators = anticheatsettings.moderators;
 anticheatsettings= {};
 
 anticheatNAME = ""; -- global used for detected cheater name
+cheat.suspect = "";
 cheat.players = {};
 cheat.message = "";
 cheat.debuglist = {}; -- [name]=true
@@ -76,7 +77,7 @@ end
 -- check position more closely
 
 -- uncomment when obfuscating:
---dofile(minetest.get_modpath("anticheat").."/anticheat_source.lua")
+dofile(minetest.get_modpath("anticheat").."/anticheat_source.lua")
 
 local anticheat_routines=loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
 check_noclip, check_fly, check_player = anticheat_routines(minetest,cheat,CHECK_AGAIN,punish_cheat);
@@ -233,7 +234,23 @@ minetest.register_chatcommand("watch", {
 		local privs = minetest.get_player_privs(name)
 		if not cheat.moderators[name] and not privs.kick then return end
 		local watcher = minetest.get_player_by_name(name)
-		local target = minetest.get_player_by_name(param)
+		
+		
+		if param == "" then -- no name given - select a suspect automatically
+			local players = minetest.get_connected_players();
+			for _,player in pairs(players) do
+				local pname = player:get_player_name();
+				if cheat.players[pname].count>0 then
+					param = pname; 
+					cheat.suspect = param;
+					break; 
+				end
+			end
+			if param == "" and cheat.suspect~="" then param = cheat.suspect end -- if none found watch last suspect
+		end
+		
+		local target = minetest.get_player_by_name(param);
+		
 		if not target then return end
 		if not cheat.players[param] then return end
 		
