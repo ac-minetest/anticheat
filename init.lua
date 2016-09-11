@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "08.28.2016a";
+local version = "09.11.2016a";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -44,6 +44,7 @@ cheat.nodelist = {["default:stone"] = false, ["default:cobble"]= false, ["defaul
 local punish_cheat = function(name)
 	
 	local player = minetest.get_player_by_name(name); 
+	
 	if not player then return end
 	local text=""; local logtext = "";
 	
@@ -53,7 +54,7 @@ local punish_cheat = function(name)
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
 		text = "#anticheat: Player ".. name .. " was caught flying";
-		logtext="#anticheat: Player ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
+		logtext= "#anticheat: Player ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos) .. " time ".. os.date("%H : %M . %S ");
 		player:set_hp(0);
 	end
 	
