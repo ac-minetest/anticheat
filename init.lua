@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "09.11.2016a";
+local version = "09.12.2016a";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -27,7 +27,9 @@ local CHECK_AGAIN = anticheatsettings.CHECK_AGAIN;
 cheat.moderators = anticheatsettings.moderators;
 anticheatsettings= {};
 
-anticheatNAME = ""; -- global used for detected cheater name
+anticheatdb = {}; -- data about detected cheaters
+
+
 cheat.suspect = "";
 cheat.players = {};
 cheat.message = "";
@@ -44,17 +46,18 @@ cheat.nodelist = {["default:stone"] = false, ["default:cobble"]= false, ["defaul
 local punish_cheat = function(name)
 	
 	local player = minetest.get_player_by_name(name); 
+	local ip = tostring(minetest.get_player_ip(name));
 	
 	if not player then return end
 	local text=""; local logtext = "";
 	
 	if cheat.players[name].cheattype == 1 then
-		text = "#anticheat: Player ".. name .. " was caught walking inside wall";
+		text = "#anticheat: ".. name .. " (ip "..ip..") was caught walking inside wall";
 		logtext = "#anticheat: Player ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
-		text = "#anticheat: Player ".. name .. " was caught flying";
-		logtext= "#anticheat: Player ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos) .. " time ".. os.date("%H : %M . %S ");
+		text = "#anticheat: ".. name .. " was caught flying";
+		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " (ip "..ip..") was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	end
 	
@@ -63,7 +66,9 @@ local punish_cheat = function(name)
 		minetest.chat_send_all(text);
 		minetest.log("action", logtext);
 		cheat.message = logtext;
-		anticheatNAME = name;
+		
+		anticheatdb[ip] = {name = name,msg = logtext};
+
 		cheat.players[name].count=0; -- reset counter
 		cheat.players[name].cheattype = 0;
 		
@@ -119,10 +124,32 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	local pos = player:getpos();
 	cheat.players[name]={count=0,cheatpos = pos, clearpos = pos, lastpos = pos, cheattype = 0}; -- type 0: none, 1 noclip, 2 fly
 	watchers[name] = {}; -- for spectator mod
+	
+	local ip = tostring(minetest.get_player_ip(name));
+	local msg = "";
+	
+	-- check anticheat db
+	--check ip
+	if anticheatdb[ip] then 
+		msg = "#anticheat: welcome back detected cheater, ip = " .. ip .. ", name " .. anticheatdb[ip].name .. ", new name = " .. name;
+	end;
+	--check names
+	for ip,v in pairs(anticheatdb) do
+		if v.name == name then 
+			msg = "#anticheat: welcome back detected cheater, ip = " .. ip .. ", name = newname =  " .. v.name;
+			break;
+		end
+	end
+	
+	if msg~="" then
+		for name,_ in pairs(cheat.moderators) do 
+			minetest.chat_send_player(name,msg);
+		end
+	end
+	
 end)
 
-
-minetest.register_chatcommand("cstats", { -- see current stats
+minetest.register_chatcommand("cchk", { -- see cheat report
 	privs = {
 		interact = true
 	},
@@ -130,18 +157,52 @@ minetest.register_chatcommand("cstats", { -- see current stats
 		local privs = minetest.get_player_privs(name).privs;
 		if not cheat.moderators[name] and not privs then return end
 
-		minetest.chat_send_player(name,cheat.message); -- displays last cheat message
+		local player = minetest.get_player_by_name(param);
+		if not player then return end
+		check_player(player);
 		
+		
+		local players = minetest.get_connected_players();		
+		for name,_ in pairs(cheat.debuglist) do -- show suspects in debug
+			for _,player in pairs(players) do
+				local pname = player:get_player_name();
+				if cheat.players[pname].count>0 then
+					minetest.chat_send_player(name, "name " .. pname .. ", cheat pos " .. minetest.pos_to_string(cheat.players[pname].cheatpos) .. " last clear pos " .. minetest.pos_to_string(cheat.players[pname].clearpos) .. " cheat type " .. cheat.players[pname].cheattype .. " cheatcount " .. cheat.players[pname].count );
+				end
+			end
+		end
+		
+		
+	end
+})
+
+
+minetest.register_chatcommand("crep", { -- see cheat report
+	privs = {
+		interact = true
+	},
+	func = function(name, param)
+		local privs = minetest.get_player_privs(name).privs;
+		if not cheat.moderators[name] and not privs then return end
+		
+		local text = "";
+		for ip,v in pairs(anticheatdb) do
+			text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
+		end
+		if text ~= "" then
+			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;CHEAT REPORT;".. text.."]"
+			minetest.show_formspec(name, "basic_machines:help_mover", form)
+		end
+		
+		-- suspects info
 		local players = minetest.get_connected_players();
-		
 		for _,player in pairs(players) do
 			local pname = player:get_player_name();
 			if cheat.players[pname].count>0 then
 				minetest.chat_send_player(name, "name " .. pname .. ", cheat pos " .. minetest.pos_to_string(cheat.players[pname].cheatpos) .. " last clear pos " .. minetest.pos_to_string(cheat.players[pname].lastpos) .. " cheat type " .. cheat.players[pname].cheattype .. " cheatcount " .. cheat.players[pname].count );
 			end
 		end
-	
-		
+
 	end
 })
 
@@ -254,8 +315,18 @@ minetest.register_chatcommand("watch", {
 		
 		if not target then return end
 		if not cheat.players[param] then return end
+
 		
-		if anticheatNAME==param or cheat.players[param].count>0 or privs.kick then
+		local canwatch = false;
+		for ip,v in pairs(anticheatdb) do
+			if v.name == param then 
+				canwatch = true;
+				break;
+			end
+		end
+	
+		
+		if canwatch or cheat.players[param].count>0 or param == cheat.suspect or privs.kick then
 		else 
 			minetest.chat_send_player(name, "ordinary watchers can only watch cheat suspects of detected cheaters");
 			return
