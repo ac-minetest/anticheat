@@ -25,7 +25,7 @@ dofile(minetest.get_modpath("anticheat").."/settings.lua")
 local CHEAT_TIMESTEP = anticheatsettings.CHEAT_TIMESTEP;
 local CHECK_AGAIN = anticheatsettings.CHECK_AGAIN;
 cheat.moderators = anticheatsettings.moderators;
-anticheatsettings= {};
+
 
 anticheatdb = {}; -- data about detected cheaters
 
@@ -67,7 +67,7 @@ local punish_cheat = function(name)
 		minetest.log("action", logtext);
 		cheat.message = logtext;
 		
-		anticheatdb[ip] = {name = name,msg = logtext};
+		anticheatdb[ip] = {name = name, msg = logtext};
 
 		cheat.players[name].count=0; -- reset counter
 		cheat.players[name].cheattype = 0;
@@ -187,7 +187,9 @@ minetest.register_chatcommand("crep", { -- see cheat report
 		
 		local text = "";
 		for ip,v in pairs(anticheatdb) do
-			text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
+			if v and v.name and v.msg then
+				text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
+			end
 		end
 		if text ~= "" then
 			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;CHEAT REPORT;".. text.."]"
