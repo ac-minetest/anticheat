@@ -341,6 +341,14 @@ minetest.register_chatcommand("watch", {
 				original_pos[watcher] = watcher:getpos()
 			end
 		
+			-- show inventory
+			local tinv =  target:get_inventory():get_list("main");
+			for i,v in pairs(tinv) do tinv[i] = v:to_string(); end
+			tinv = dump(tinv);
+			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;INVENTORY LIST;".. tinv.."]"
+			minetest.show_formspec(name, "watch_inventory", form)
+			
+			
 			default.player_attached[name] = true
 			watcher:set_attach(target, "", {x=0, y=-5, z=-20}, {x=0, y=0, z=0})
 			watcher:set_eye_offset({x=0, y=-5, z=-20}, {x=0, y=0, z=0})
