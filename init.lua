@@ -52,7 +52,7 @@ local punish_cheat = function(name)
 	local text=""; local logtext = "";
 	
 	if cheat.players[name].cheattype == 1 then
-		text = "#anticheat: ".. name .. " (ip "..ip..") was caught walking inside wall";
+		text = "#anticheat: ".. name .. " was caught walking inside wall";
 		logtext = "#anticheat: Player ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
