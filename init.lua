@@ -29,11 +29,11 @@ cheat.moderators = anticheatsettings.moderators;
 
 anticheatdb = {}; -- data about detected cheaters
 
-
 cheat.suspect = "";
 cheat.players = {};
 cheat.message = "";
-cheat.debuglist = {}; -- [name]=true
+cheat.debuglist = {}; -- [name]=true -- who gets to see debug msgs
+
 cheat.scan_timer = 0
 cheat.nodelist = {};
 cheat.watcher = {}; -- list of watchers
@@ -53,11 +53,11 @@ local punish_cheat = function(name)
 	
 	if cheat.players[name].cheattype == 1 then
 		text = "#anticheat: ".. name .. " was caught walking inside wall";
-		logtext = "#anticheat: Player ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
+		logtext = os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
 		text = "#anticheat: ".. name .. " was caught flying";
-		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " (ip "..ip..") was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
+		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	end
 	
@@ -117,12 +117,25 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
+-- collects misc stats on players
+
+minetest.register_on_cheat(
+	function(player, c)
+		local name = player:get_player_name(); if name == nil then return end
+		local stats = cheat.players[name].stats; 
+		if not stats[c.type] then stats[c.type] = 0 end
+		stats[c.type]=stats[c.type]+1;
+	end
+)
+
+
 
 local watchers = {}; -- for each player a list of watchers
 minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	local name = player:get_player_name(); if name == nil then return end 
 	local pos = player:getpos();
 	cheat.players[name]={count=0,cheatpos = pos, clearpos = pos, lastpos = pos, cheattype = 0}; -- type 0: none, 1 noclip, 2 fly
+	cheat.players[name].stats = {}; -- various statistics about player
 	watchers[name] = {}; -- for spectator mod
 	
 	local ip = tostring(minetest.get_player_ip(name));
@@ -185,17 +198,35 @@ minetest.register_chatcommand("crep", { -- see cheat report
 		local privs = minetest.get_player_privs(name).privs;
 		if not cheat.moderators[name] and not privs then return end
 		
-		local text = "";
-		for ip,v in pairs(anticheatdb) do
-			if v and v.name and v.msg then
-				text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
-			end
-		end
-		if text ~= "" then
-			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;CHEAT REPORT;".. text.."]"
-			minetest.show_formspec(name, "basic_machines:help_mover", form)
+		if param == "" then 
+			minetest.chat_send_player(name,"use: crep type, types: 0(default) cheat report, 1 connected player stats");
 		end
 		
+		param = tonumber(param) or 0;
+		
+		if param == 0 then -- show cheat report
+			local text = "";
+			for ip,v in pairs(anticheatdb) do
+				if v and v.name and v.msg then
+					text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
+				end
+			end
+			if text ~= "" then
+				local form = "size [6,7] textarea[0,0;6.5,8.5;creport;CHEAT REPORT;".. text.."]"
+				minetest.show_formspec(name, "anticheatreport", form)
+			end
+		elseif param == 1 then -- show cheat stats
+			local text = "";
+			local players = minetest.get_connected_players();
+			for _,player in pairs(players) do
+				local pname = player:get_player_name();
+				text = text .. "name " .. pname .. " ".. string.gsub(dump(cheat.players[pname].stats), "\n", " ") .. "\n";
+			end
+			if text ~= "" then
+				local form = "size [10,8] textarea[0,0;10.5,9.;creport;CHEAT STATISTICS;".. text.."]"
+				minetest.show_formspec(name, "anticheatreport", form)
+			end
+		end
 		-- suspects info
 		local players = minetest.get_connected_players();
 		for _,player in pairs(players) do
