@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "09.13.2016a";
+local version = "09.20.2016a";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -56,14 +56,18 @@ local punish_cheat = function(name)
 		logtext = os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
-		text = "#anticheat: ".. name .. " was caught flying";
 		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
-		player:set_hp(0);
+		if cheat.players[name].cheatpos.y>5 then -- only above height 5 it directly damages flyer
+			text = "#anticheat: ".. name .. " was caught flying";
+			player:set_hp(0);
+		end
 	end
-	
 	
 	if text~="" then
 		minetest.chat_send_all(text);
+	end	
+	
+	if logtext~="" then
 		minetest.log("action", logtext);
 		cheat.message = logtext;
 		
@@ -71,11 +75,10 @@ local punish_cheat = function(name)
 
 		cheat.players[name].count=0; -- reset counter
 		cheat.players[name].cheattype = 0;
-		
+	
 		for name,_ in pairs(cheat.moderators) do -- display full message to moderators
 			minetest.chat_send_player(name,logtext);
 		end
-
 	end
 end
 
@@ -208,7 +211,7 @@ minetest.register_chatcommand("crep", { -- see cheat report
 			local text = "";
 			for ip,v in pairs(anticheatdb) do
 				if v and v.name and v.msg then
-					text = text .. "ip " .. ip .. " name " .. v.name .. " ".. v.msg .. "\n";
+					text = text .. "ip " .. ip .. " ".. v.msg .. "\n";
 				end
 			end
 			if text ~= "" then
