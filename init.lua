@@ -120,6 +120,54 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
+-- long range dig check
+
+local check_can_dig = function(pos, digger) 
+	minetest.chat_send_all("a")
+	--if pos.y>-32 then return end
+	local p = digger:getpos();
+	local dist = math.max(math.abs(p.x-pos.x),math.abs(p.y-pos.y),math.abs(p.z-pos.z));
+	
+	minetest.chat_send_all("dist " .. dist)
+	
+	if dist>5 then -- here 5
+		dist = math.floor(dist*100)/100;
+		local pname = digger:get_player_name();
+		local logtext = "#long range dig: name " .. pname ..", distance " .. dist .. ", pos " .. minetest.pos_to_string(pos);
+		for name,_ in pairs(cheat.debuglist) do -- show to all watchers
+			minetest.chat_send_player(name,logtext)
+
+		end
+		local ip = tostring(minetest.get_player_ip(pname));
+		anticheatdb[ip] = {name = pname, msg = logtext};
+		return false
+	end
+	return true
+end
+
+local set_check_can_dig = function(name)
+	local tabl = minetest.registered_nodes[name];
+	if not tabl then return end
+	tabl.can_dig = check_can_dig;
+	minetest.override_item(name, {can_dig = check_can_dig})
+	--minetest.register_node(":"..name, tabl);
+end
+
+minetest.after(0, 
+	function() 
+		set_check_can_dig("default:stone");
+		set_check_can_dig("default:stone_with_iron");
+		set_check_can_dig("default:stone_with_copper");
+		set_check_can_dig("default:stone_with_coal");
+		set_check_can_dig("default:stone_with_gold");
+		set_check_can_dig("default:stone_with_mese");
+		set_check_can_dig("default:stone_with_diamond");
+	end
+)
+
+
+
+
 -- collects misc stats on players
 
 minetest.register_on_cheat(
@@ -260,6 +308,8 @@ minetest.register_chatcommand("cdebug", { -- toggle cdebug= display of stats on/
 		end
 	end
 })
+
+
 
 
 ------------------------------------------------------
