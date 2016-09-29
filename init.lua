@@ -123,12 +123,10 @@ end)
 -- long range dig check
 
 local check_can_dig = function(pos, digger) 
-	minetest.chat_send_all("a")
-	--if pos.y>-32 then return end
+	
 	local p = digger:getpos();
 	local dist = math.max(math.abs(p.x-pos.x),math.abs(p.y-pos.y),math.abs(p.z-pos.z));
-	
-	minetest.chat_send_all("dist " .. dist)
+
 	
 	if dist>5 then -- here 5
 		dist = math.floor(dist*100)/100;
@@ -155,7 +153,6 @@ end
 
 minetest.after(0, 
 	function() 
-		set_check_can_dig("default:stone");
 		set_check_can_dig("default:stone_with_iron");
 		set_check_can_dig("default:stone_with_copper");
 		set_check_can_dig("default:stone_with_coal");
