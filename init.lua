@@ -125,6 +125,7 @@ end)
 local check_can_dig = function(pos, digger) 
 	
 	local p = digger:getpos();
+	if p.y<0 then p.y=p.y+2 else p.y=p.y+1 end -- head position
 	local dist = math.max(math.abs(p.x-pos.x),math.abs(p.y-pos.y),math.abs(p.z-pos.z));
 
 	
