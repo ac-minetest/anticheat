@@ -129,7 +129,7 @@ local check_can_dig = function(pos, digger)
 	local dist = math.max(math.abs(p.x-pos.x),math.abs(p.y-pos.y),math.abs(p.z-pos.z));
 
 	
-	if dist>5 then -- here 5
+	if dist>6 then -- here 5
 		dist = math.floor(dist*100)/100;
 		local pname = digger:get_player_name();
 		local logtext = "#long range dig: name " .. pname ..", distance " .. dist .. ", pos " .. minetest.pos_to_string(pos);
@@ -141,6 +141,7 @@ local check_can_dig = function(pos, digger)
 		anticheatdb[ip] = {name = pname, msg = logtext};
 		return false
 	end
+	
 	return true
 end
 
@@ -154,6 +155,7 @@ end
 
 minetest.after(0, 
 	function() 
+		set_check_can_dig("default:stone");
 		set_check_can_dig("default:stone_with_iron");
 		set_check_can_dig("default:stone_with_copper");
 		set_check_can_dig("default:stone_with_coal");
@@ -248,7 +250,7 @@ minetest.register_chatcommand("crep", { -- see cheat report
 		if not cheat.moderators[name] and not privs then return end
 		
 		if param == "" then 
-			minetest.chat_send_player(name,"use: crep type, types: 0(default) cheat report, 1 connected player stats");
+			minetest.chat_send_player(name,"use: crep type, types: 0(default) cheat report, 1 connected player stats (10.04.16)");
 		end
 		
 		param = tonumber(param) or 0;
