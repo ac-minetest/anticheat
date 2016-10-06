@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "10.01.2016a";
+local version = "10/06/2016";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -296,7 +296,7 @@ minetest.register_chatcommand("crep", { -- see cheat report
 		if not cheat.moderators[name] and not privs then return end
 		
 		if param == "" then 
-			minetest.chat_send_player(name,"use: crep type, types: 0(default) cheat report, 1 connected player stats (10.04.16)");
+			minetest.chat_send_player(name,"use: crep type, types: 0(default) cheat report, 1 connected player stats (".. version ..")");
 		end
 		
 		param = tonumber(param) or 0;
