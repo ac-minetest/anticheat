@@ -30,11 +30,13 @@ cheat.moderators = anticheatsettings.moderators;
 anticheatdb = {}; -- data about detected cheaters
 
 cheat.suspect = "";
-cheat.players = {};
+cheat.players = {}; -- temporary cheat detection db
 cheat.message = "";
 cheat.debuglist = {}; -- [name]=true -- who gets to see debug msgs
 
-cheat.scan_timer = 0
+cheat.scan_timer = 0; -- global scan of players
+cheat.stat_timer = 0; -- used to collect stats
+
 cheat.nodelist = {};
 cheat.watcher = {}; -- list of watchers
 
@@ -96,8 +98,32 @@ minetest.register_globalstep(function(dtime)
 	
 	cheat.scan_timer = cheat.scan_timer + dtime
 	
+	
 	-- GENERAL SCAN OF ALL PLAYERS
 	if cheat.scan_timer>cheat.timestep then	
+		
+		
+		cheat.stat_timer = cheat.stat_timer + cheat.timestep; 
+		-- dig xp stats every 2 minutes
+		if boneworld and cheat.stat_timer>120 then
+			cheat.stat_timer = 0;
+			local players = minetest.get_connected_players();
+			for _,player in pairs(players) do
+				local pname = player:get_player_name();
+				if cheat.players[pname].stats.state == 1 then -- only if dig xp loaded to prevent anomalous stats
+					local deltadig = cheat.players[pname].stats.digxp;
+					cheat.players[pname].stats.digxp = boneworld.digxp[pname];
+					deltadig = boneworld.digxp[pname]-deltadig;
+					cheat.players[pname].stats.deltadig = deltadig;
+					
+					if deltadig>cheat.players[pname].stats.maxdeltadig then
+						cheat.players[pname].stats.maxdeltadig = deltadig;
+					end
+				end
+			end
+		end
+		
+		
 		cheat.timestep = CHEAT_TIMESTEP + (2*math.random()-1)*2; -- randomize step so its unpredictable
 		cheat.scan_timer=0;
 		--local t = minetest.get_gametime();
@@ -168,16 +194,17 @@ minetest.after(0,
 
 
 
+-- DISABLED: lot of false positives
 -- collects misc stats on players
 
-minetest.register_on_cheat(
-	function(player, c)
-		local name = player:get_player_name(); if name == nil then return end
-		local stats = cheat.players[name].stats; 
-		if not stats[c.type] then stats[c.type] = 0 end
-		stats[c.type]=stats[c.type]+1;
-	end
-)
+-- minetest.register_on_cheat(
+	-- function(player, c)
+		-- local name = player:get_player_name(); if name == nil then return end
+		-- local stats = cheat.players[name].stats; 
+		-- if not stats[c.type] then stats[c.type] = 0 end
+		-- stats[c.type]=stats[c.type]+1;
+	-- end
+-- )
 
 
 
@@ -185,8 +212,27 @@ local watchers = {}; -- for each player a list of watchers
 minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	local name = player:get_player_name(); if name == nil then return end 
 	local pos = player:getpos();
-	cheat.players[name]={count=0,cheatpos = pos, clearpos = pos, lastpos = pos, cheattype = 0}; -- type 0: none, 1 noclip, 2 fly
-	cheat.players[name].stats = {}; -- various statistics about player
+	
+	if cheat.players[name] == nil then
+		cheat.players[name]={count=0,cheatpos = pos, clearpos = pos, lastpos = pos, cheattype = 0}; -- type 0: none, 1 noclip, 2 fly
+	end
+	
+	if cheat.players[name] and cheat.players[name].stats == nil then
+		cheat.players[name].stats = {maxdeltadig=0,deltadig = 0,digxp = 0, state = 0}; -- various statistics about player: max dig xp increase in 2 minutes, current dig xp increase
+	
+		minetest.after(5, -- load digxp after boneworld loads it
+		function() 
+			if boneworld and boneworld.xp then
+				cheat.players[name].stats.digxp = boneworld.digxp[name] or 0;
+				cheat.players[name].stats.state = 1;
+			end
+		end
+	)
+	
+	end
+	--state 0 = stats not loaded yet
+	
+	
 	watchers[name] = {}; -- for spectator mod
 	
 	local ip = tostring(minetest.get_player_ip(name));
@@ -271,7 +317,12 @@ minetest.register_chatcommand("crep", { -- see cheat report
 			local players = minetest.get_connected_players();
 			for _,player in pairs(players) do
 				local pname = player:get_player_name();
-				text = text .. "name " .. pname .. " ".. string.gsub(dump(cheat.players[pname].stats), "\n", " ") .. "\n";
+				local ip = tostring(minetest.get_player_ip(pname));
+				
+				
+				text = text .. "\nname " .. pname .. ", digxp " .. cheat.players[pname].stats.digxp ..
+				", deltadigxp(2min) " .. cheat.players[pname].stats.deltadig .. ", maxdeltadigxp " .. cheat.players[pname].stats.maxdeltadig; -- .. " ".. string.gsub(dump(cheat.players[pname].stats), "\n", " ");
+				if anticheatdb[ip] then text = text .. "    (DETECTED) ip ".. ip .. ", name " .. anticheatdb[ip].name end
 			end
 			if text ~= "" then
 				local form = "size [10,8] textarea[0,0;10.5,9.;creport;CHEAT STATISTICS;".. text.."]"
@@ -410,6 +461,9 @@ minetest.register_chatcommand("watch", {
 				break;
 			end
 		end
+		
+		local ip = tostring(minetest.get_player_ip(pname));
+		if anticheatdb[ip] then canwatch = true end -- can watch since this ip was detected before
 	
 		
 		if canwatch or cheat.players[param].count>0 or param == cheat.suspect or privs.kick then
