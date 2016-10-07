@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "10/06/2016";
+local version = "10/07/2016";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -462,7 +462,7 @@ minetest.register_chatcommand("watch", {
 			end
 		end
 		
-		local ip = tostring(minetest.get_player_ip(pname));
+		local ip = tostring(minetest.get_player_ip(param));
 		if anticheatdb[ip] then canwatch = true end -- can watch since this ip was detected before
 	
 		
