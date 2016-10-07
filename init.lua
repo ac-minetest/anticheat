@@ -320,8 +320,8 @@ minetest.register_chatcommand("crep", { -- see cheat report
 				local ip = tostring(minetest.get_player_ip(pname));
 				
 				
-				text = text .. "\nname " .. pname .. ", digxp " .. cheat.players[pname].stats.digxp ..
-				", deltadigxp(2min) " .. cheat.players[pname].stats.deltadig .. ", maxdeltadigxp " .. cheat.players[pname].stats.maxdeltadig; -- .. " ".. string.gsub(dump(cheat.players[pname].stats), "\n", " ");
+				text = text .. "\nname " .. pname .. ", digxp " .. math.floor(1000*cheat.players[pname].stats.digxp)/1000 ..
+				", deltadigxp(2min) " .. math.floor(1000*cheat.players[pname].stats.deltadig)/1000 .. ", maxdeltadigxp " .. math.floor(1000*cheat.players[pname].stats.maxdeltadig)/1000; -- .. " ".. string.gsub(dump(cheat.players[pname].stats), "\n", " ");
 				if anticheatdb[ip] then text = text .. "    (DETECTED) ip ".. ip .. ", name " .. anticheatdb[ip].name end
 			end
 			if text ~= "" then
