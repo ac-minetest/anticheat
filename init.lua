@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "10/07/2016";
+local version = "10/09/2016";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -111,13 +111,15 @@ minetest.register_globalstep(function(dtime)
 			for _,player in pairs(players) do
 				local pname = player:get_player_name();
 				if cheat.players[pname].stats.state == 1 then -- only if dig xp loaded to prevent anomalous stats
-					local deltadig = cheat.players[pname].stats.digxp;
-					cheat.players[pname].stats.digxp = boneworld.digxp[pname];
-					deltadig = boneworld.digxp[pname]-deltadig;
-					cheat.players[pname].stats.deltadig = deltadig;
-					
-					if deltadig>cheat.players[pname].stats.maxdeltadig then
-						cheat.players[pname].stats.maxdeltadig = deltadig;
+					if boneworld.digxp[pname] then
+						local deltadig = cheat.players[pname].stats.digxp;
+						cheat.players[pname].stats.digxp = boneworld.digxp[pname];
+						deltadig = boneworld.digxp[pname]-deltadig;
+						cheat.players[pname].stats.deltadig = deltadig;
+						
+						if deltadig>cheat.players[pname].stats.maxdeltadig then
+							cheat.players[pname].stats.maxdeltadig = deltadig;
+						end
 					end
 				end
 			end
