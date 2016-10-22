@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "10/09/2016";
+local version = "10/22/2016";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -61,7 +61,7 @@ local punish_cheat = function(name)
 		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		if cheat.players[name].cheatpos.y>5 then -- only above height 5 it directly damages flyer
 			text = "#anticheat: ".. name .. " was caught flying";
-			player:set_hp(0);
+			--player:set_hp(0);
 		end
 	end
 	
@@ -120,6 +120,14 @@ minetest.register_globalstep(function(dtime)
 						if deltadig>cheat.players[pname].stats.maxdeltadig then
 							cheat.players[pname].stats.maxdeltadig = deltadig;
 						end
+						
+						if deltadig>2 then -- unnaturally high deltadig
+							local ip = tostring(minetest.get_player_ip(pname));
+							local logtext = os.date("%H:%M.%S") .. " #anticheat: " .. pname .. " (ip " .. ip .. ") is mining resources too fast, deltadig " .. deltadig;
+							anticheatdb[ip] = {name = pname, msg = logtext};
+							minetest.log("action", logtext);
+						end
+						
 					end
 				end
 			end
@@ -160,7 +168,7 @@ local check_can_dig = function(pos, digger)
 	if dist>6 then -- here 5
 		dist = math.floor(dist*100)/100;
 		local pname = digger:get_player_name();
-		local logtext = "#long range dig: name " .. pname ..", distance " .. dist .. ", pos " .. minetest.pos_to_string(pos);
+		local logtext = os.date("%H:%M.%S") .. "#anticheat: long range dig " .. pname ..", distance " .. dist .. ", pos " .. minetest.pos_to_string(pos);
 		for name,_ in pairs(cheat.debuglist) do -- show to all watchers
 			minetest.chat_send_player(name,logtext)
 
