@@ -549,8 +549,10 @@ minetest.register_chatcommand("unwatch", {
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	for pname,_ in pairs (watchers[name]) do
-		unwatching(pname); -- all watchers do /unwatch
+	if watchers[name] then
+		for pname,_ in pairs (watchers[name]) do --xxx
+			unwatching(pname); -- all watchers do /unwatch
+		end
 	end
 	watchers[name] = nil;
 end)
