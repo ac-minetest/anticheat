@@ -58,6 +58,8 @@ local punish_cheat = function(name)
 		logtext = os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught walking inside wall at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		player:set_hp(0);
 	elseif cheat.players[name].cheattype == 2 then
+		
+		local gravity = player:get_physics_override().gravity;	if gravity<1 then return end
 		logtext= os.date("%H:%M.%S").." #anticheat: ".. name .. " was caught flying at " .. minetest.pos_to_string(cheat.players[name].cheatpos);
 		if cheat.players[name].cheatpos.y>5 then -- only above height 5 it directly damages flyer
 			text = "#anticheat: ".. name .. " was caught flying";
@@ -90,10 +92,11 @@ end
 -- uncomment when obfuscating:
 --dofile(minetest.get_modpath("anticheat").."/anticheat_source.lua")
 
-
 local ie = minetest.request_insecure_environment() or _G;
 
 local anticheat_routines = ie.loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
+
+--local anticheat_routines = loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
 check_noclip, check_fly, check_player = anticheat_routines(minetest,cheat,CHECK_AGAIN,punish_cheat);
 	
 
@@ -496,7 +499,7 @@ minetest.register_chatcommand("watch", {
 			local tinv =  target:get_inventory():get_list("main");
 			for i,v in pairs(tinv) do tinv[i] = v:to_string(); end
 			tinv = dump(tinv);
-			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;INVENTORY LIST;".. tinv.."]"
+			local form = "size [6,7] textarea[0,0;6.5,8.5;creport;INVENTORY LIST;".. minetest.formspec_escape(tinv).."]"
 			minetest.show_formspec(name, "watch_inventory", form)
 			
 			
