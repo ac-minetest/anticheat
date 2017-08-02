@@ -271,10 +271,11 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	
 end)
 
-minetest.register_chatcommand("cchk", { -- see cheat report
+minetest.register_chatcommand("cchk", { 
 	privs = {
 		interact = true
 	},
+	description = "cchk NAME,  checks if player is cheating in this moment",
 	func = function(name, param)
 		local privs = minetest.get_player_privs(name).privs;
 		if not cheat.moderators[name] and not privs then return end
@@ -303,6 +304,7 @@ minetest.register_chatcommand("crep", { -- see cheat report
 	privs = {
 		interact = true
 	},
+	description = "crep 0/1,  0 = default cheat report, 1 = connected player stats",
 	func = function(name, param)
 		local privs = minetest.get_player_privs(name).privs;
 		if not cheat.moderators[name] and not privs then return end
@@ -438,7 +440,7 @@ end
 
 minetest.register_chatcommand("watch", {
 	params = "<to_name>",
-	description = "",
+	description = " - spectate what player is doing, stop with /unwatch",
 	privs = {interact=true},
 	func = function(name, param)
 		
