@@ -17,7 +17,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 local cheat = {};
-local version = "10/27/2016";
+local version = "08/02/2017";
 
 anticheatsettings = {};
 dofile(minetest.get_modpath("anticheat").."/settings.lua")
@@ -87,16 +87,12 @@ local punish_cheat = function(name)
 end
 
 
--- check position more closely
-
 -- uncomment when obfuscating:
 --dofile(minetest.get_modpath("anticheat").."/anticheat_source.lua")
 
 local ie = minetest.request_insecure_environment() or _G;
-
 local anticheat_routines = ie.loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
 
---local anticheat_routines = loadfile(minetest.get_modpath("anticheat").."/anticheat_routines.bin")
 check_noclip, check_fly, check_player = anticheat_routines(minetest,cheat,CHECK_AGAIN,punish_cheat);
 	
 

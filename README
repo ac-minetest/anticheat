@@ -17,7 +17,11 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------
 
-features:
+INSTALLATION:
+	If you have 'security' enabled in minetest (secure.enable_security = true)
+	then you need to add in your minetest.conf: secure.trusted_mods = anticheat
+
+FEATURES:
 
 0. what it does:
 	- succesffuly detect noclip/fly. Its just a matter of time when someone noclipping/flying is detected.
@@ -26,8 +30,8 @@ features:
 
 1. moderators can:
 	-see full reports with coordinates of location as cheats occur
-	-use /cstats to see latest detected cheater
-	-use /cdebug to see even suspected cheats to be verified later
+	-use /crep to see latest detected cheater
+	-use /crep 1 to see detailed stats
 	-use /watch NAME to spectate suspect/detected cheater, /unwatch to return to normal
 
 managing moderators:
