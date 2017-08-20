@@ -1,0 +1,286 @@
+-- You dont have time to understand this? oh well too bad then ... it was hard to make so it should be hard to read.
+-- Dont expect others to do hard work for you and then pass it as your own.
+
+function someFunc0(INPUT_VAR_0_)
+local var_0_2 = INPUT_VAR_0_
+local var_0_1 = minetest.get_node(var_0_2)
+var_0_2 = true --var_0_2 PRIMITIVE-PRIMITIVE
+if var_0_1.name ~=  "air" then
+--jump to 0015 (if previous if statement is false)
+if unknown0 == nil then
+--jump to 0015 (if previous if statement is false)
+--location 0015
+if not  true  then
+--jump to 0047 (if previous if statement is false)
+local var_0_4 = {} --to find out the contents of this table look inside the lua file
+var_0_4.x =  INPUT_VAR_0_.x -  1 
+var_0_4.y =  INPUT_VAR_0_.y -  1 
+var_0_4.z =  INPUT_VAR_0_.z -  1 
+local var_0_5 = {} --to find out the contents of this table look inside the lua file
+var_0_5.x =  INPUT_VAR_0_.x +  1 
+var_0_5.y =  INPUT_VAR_0_.y +  1 
+var_0_5.z =  INPUT_VAR_0_.z +  1 
+local var_0_6 = {} --to find out the contents of this table look inside the lua file
+local var_0_3 = minetest.find_nodes_in_area(var_0_4, var_0_5, var_0_6)
+LEN unhandled at 0041
+if var_0_4 == 1 then
+--jump to 0046 (if previous if statement is false)
+return  false 
+--location 0046
+--location 0047
+return  true 
+end
+
+
+function someFunc1(INPUT_VAR_0_)
+local var_1_2 = INPUT_VAR_0_
+local var_1_1 = minetest.get_node(var_1_2)
+if var_1_1.name ==  "air" then
+--jump to 0022 (if previous if statement is false)
+var_1_2 = {} --to find out the contents of this table look inside the lua file
+var_1_2.x = INPUT_VAR_0_.x
+var_1_2.y =  INPUT_VAR_0_.y -  1 
+var_1_2.z = INPUT_VAR_0_.z
+var_1_1 = minetest.get_node(var_1_2)
+if var_1_1.name ~=  "air" then
+--jump to 0024 (if previous if statement is false)
+--location 0022
+var_1_1 = false --var_1_1 PRIMITIVE-PRIMITIVE
+--jump to 0025 (if previous if statement is false)
+--location 0024
+--location 0025
+if not  true  then
+--jump to 0029 (if previous if statement is false)
+return  true 
+--location 0029
+local var_1_3 = {} --to find out the contents of this table look inside the lua file
+var_1_3.x =  INPUT_VAR_0_.x -  1 
+var_1_3.y =  INPUT_VAR_0_.y -  1 
+var_1_3.z =  INPUT_VAR_0_.z -  1 
+local var_1_4 = {} --to find out the contents of this table look inside the lua file
+var_1_4.x =  INPUT_VAR_0_.x +  1 
+var_1_4.y = INPUT_VAR_0_.y
+var_1_4.z =  INPUT_VAR_0_.z +  1 
+local var_1_5 = {} --to find out the contents of this table look inside the lua file
+var_1_2 = minetest.find_nodes_in_area(var_1_3, var_1_4, var_1_5)
+LEN unhandled at 0052
+if var_1_3 == 1 then
+--jump to 0058 (if previous if statement is false)
+return  false 
+--jump to 0060 (if previous if statement is false)
+--location 0058
+return  true 
+--location 0060
+return
+end
+
+
+function someFunc2(INPUT_VAR_0_)
+if  0  < INPUT_VAR_0_ then
+--jump to 0009 (if previous if statement is false)
+return math.floor( INPUT_VAR_0_ +  0.5 )
+--jump to 0016 (if previous if statement is false)
+--location 0009
+UNM unhandled at 0011
+local var_2_1 = math.floor( var_2_2 +  0.5 )
+UNM unhandled at 0014
+return var_2_1
+--location 0016
+return
+end
+
+
+function someFunc3()
+unknown1.count =  0 
+local var_3_0 = check_noclip(pos)
+if not var_3_0 then
+--jump to 0016 (if previous if statement is false)
+punish_cheat(name)
+--jump to 0028 (if previous if statement is false)
+--location 0016
+unknown2.count =  0 
+unknown3.cheattype =  0 
+--location 0028
+return
+end
+
+
+function someFunc4()
+unknown4.count =  0 
+local var_4_0 = check_fly(pos)
+if not var_4_0 then
+--jump to 0016 (if previous if statement is false)
+punish_cheat(name)
+--jump to 0028 (if previous if statement is false)
+--location 0016
+unknown5.count =  0 
+unknown6.cheattype =  0 
+--location 0028
+return
+end
+
+
+function someFunc5(INPUT_VAR_0_)
+local var_5_2 = INPUT_VAR_0_
+local var_5_1 = INPUT_VAR_0_.get_player_name(var_5_2)
+local var_5_3 = var_5_1
+var_5_2 = minetest.get_player_privs(var_5_3)
+if var_5_2.kick then
+--jump to 0012 (if previous if statement is false)
+--location 0012
+if unknown7 then
+--jump to 0018 (if previous if statement is false)
+--location 0018
+local var_5_4 = INPUT_VAR_0_
+var_5_3 = INPUT_VAR_0_.getpos(var_5_4)
+var_5_4 = round( var_5_3.x *  10 )
+var_5_3.x =  var_5_4 /  10 
+var_5_4 = round( var_5_3.z *  10 )
+var_5_3.z =  var_5_4 /  10 
+var_5_4 = round( var_5_3.y *  10 )
+var_5_3.y =  var_5_4 /  10 
+if var_5_3.y <  0  then
+--jump to 0046 (if previous if statement is false)
+var_5_3.y =  var_5_3.y +  1 
+--location 0046
+local var_5_5 = var_5_3
+var_5_4 = minetest.get_node(var_5_5)
+var_5_5 = true --var_5_5 PRIMITIVE-PRIMITIVE
+if var_5_4.name ~=  "air" then
+--jump to 0060 (if previous if statement is false)
+if unknown8 == nil then
+--jump to 0060 (if previous if statement is false)
+--location 0060
+if var_5_4.name ==  "air" then
+--jump to 0076 (if previous if statement is false)
+local var_5_7 = {} --to find out the contents of this table look inside the lua file
+var_5_7.x = var_5_3.x
+var_5_7.y =  var_5_3.y -  1 
+var_5_7.z = var_5_3.z
+local var_5_6 = minetest.get_node(var_5_7)
+if var_5_6.name ~=  "air" then
+--jump to 0078 (if previous if statement is false)
+--location 0076
+var_5_6 = false --var_5_6 PRIMITIVE-PRIMITIVE
+--jump to 0079 (if previous if statement is false)
+--location 0078
+--location 0079
+if unknown9.count == 2 then
+--jump to 0093 (if previous if statement is false)
+unknown10.clearpos = unknown11.lastpos
+--location 0093
+if not  true  then
+--jump to 0161 (if previous if statement is false)
+if unknown12.lastpos.x == var_5_3.x then
+--jump to 0121 (if previous if statement is false)
+if unknown13.lastpos.y == var_5_3.y then
+--jump to 0121 (if previous if statement is false)
+if unknown14.lastpos.z == var_5_3.z then
+--jump to 0121 (if previous if statement is false)
+var_5_7 = false --var_5_7 PRIMITIVE-PRIMITIVE
+--jump to 0122 (if previous if statement is false)
+--location 0121
+--location 0122
+if  true  then
+--jump to 0161 (if previous if statement is false)
+if unknown15.count == 2 then
+--jump to 0134 (if previous if statement is false)
+unknown16.cheatpos = var_5_3
+--location 0134
+if unknown17.count == 2 then
+--jump to 0145 (if previous if statement is false)
+local randomFunction0 = function() end -- starts at  anticheat_source.lua:91
+minetest.after(CHECK_AGAIN, randomFunction0)
+--location 0145
+if unknown18.count == 2 then
+--jump to 0161 (if previous if statement is false)
+unknown19.count =  1 
+unknown20.cheattype =  1 
+--location 0161
+if  true  then
+--jump to 0297 (if previous if statement is false)
+var_5_7 = nil --var_5_7 PRIMITIVE-PRIMITIVE
+local var_5_9 = var_5_3
+local var_5_10 = {} --to find out the contents of this table look inside the lua file
+var_5_10.x = var_5_3.x
+var_5_10.y =  var_5_3.y -  4 
+var_5_10.z = var_5_3.z
+local var_5_8, var_5_9 = minetest.line_of_sight(var_5_9, var_5_10,  1 )
+var_5_7 = var_5_9
+var_5_6 = var_5_8
+if var_5_6 then
+--jump to 0297 (if previous if statement is false)
+var_5_9 = INPUT_VAR_0_
+local var_5_8 = INPUT_VAR_0_.get_player_control(var_5_9)
+if var_5_8.sneak then
+--jump to 0215 (if previous if statement is false)
+var_5_9 = {} --to find out the contents of this table look inside the lua file
+var_5_9.x =  var_5_3.x -  1 
+var_5_9.y =  var_5_3.y -  1 
+var_5_9.z =  var_5_3.z -  1 
+var_5_10 = {} --to find out the contents of this table look inside the lua file
+var_5_10.x =  var_5_3.x +  1 
+var_5_10.y = var_5_3.y
+var_5_10.z =  var_5_3.z +  1 
+local var_5_11 = {} --to find out the contents of this table look inside the lua file
+var_5_8 = minetest.find_nodes_in_area(var_5_9, var_5_10, var_5_11)
+LEN unhandled at 0210
+if var_5_9 <  18  then
+--jump to 0215 (if previous if statement is false)
+--location 0215
+if unknown21.lastpos.y <= var_5_3.y then
+--jump to 0297 (if previous if statement is false)
+if  false  then
+--jump to 0297 (if previous if statement is false)
+var_5_10 = {} --to find out the contents of this table look inside the lua file
+var_5_10.x =  unknown22.lastpos.x -  1 
+var_5_10.y =  unknown22.lastpos.y -  1 
+var_5_10.z =  unknown22.lastpos.z -  1 
+var_5_11 = {} --to find out the contents of this table look inside the lua file
+var_5_11.x =  unknown22.lastpos.x +  1 
+var_5_11.y = unknown22.lastpos.y
+var_5_11.z =  unknown22.lastpos.z +  1 
+local var_5_12 = {} --to find out the contents of this table look inside the lua file
+var_5_9 = minetest.find_nodes_in_area(var_5_10, var_5_11, var_5_12)
+LEN unhandled at 0252
+if var_5_10 == 4 then
+--jump to 0257 (if previous if statement is false)
+var_5_6 = true --var_5_6 PRIMITIVE-PRIMITIVE
+--jump to 0258 (if previous if statement is false)
+--location 0257
+--location 0258
+if  false  then
+--jump to 0297 (if previous if statement is false)
+if unknown23.count == 2 then
+--jump to 0270 (if previous if statement is false)
+unknown24.cheatpos = var_5_3
+--location 0270
+if unknown25.count == 2 then
+--jump to 0281 (if previous if statement is false)
+local randomFunction1 = function() end -- starts at  anticheat_source.lua:138
+minetest.after(CHECK_AGAIN, randomFunction1)
+--location 0281
+if unknown26.count == 2 then
+--jump to 0297 (if previous if statement is false)
+unknown27.count =  1 
+unknown28.cheattype =  2 
+--location 0297
+unknown29.lastpos = var_5_3
+return
+return
+return
+end
+
+
+function someFunc6()
+local randomFunction2 = function() end -- starts at  anticheat_source.lua:18
+local randomFunction3 = function() end -- starts at  anticheat_source.lua:35
+local randomFunction4 = function() end -- starts at  anticheat_source.lua:48
+local randomFunction5 = function() end -- starts at  anticheat_source.lua:57
+local var_6_8 = randomFunction2
+local var_6_9 = randomFunction3
+local var_6_10 = randomFunction5
+return var_6_8, var_6_9, var_6_10
+end
+
+
