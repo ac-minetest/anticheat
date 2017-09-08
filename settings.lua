@@ -19,7 +19,7 @@
 
 
 -- SETTINGS --------------------------------------------------------------
-anticheatsettings.CHEAT_TIMESTEP = 15; -- check all players 
+anticheatsettings.CHEAT_TIMESTEP = 15; -- check timestep all players 
 anticheatsettings.CHECK_AGAIN = 15; -- after player found in bad position check again after this to make sure its not lag, this should be larger than expected lag in seconds
 
 -- moderators list, those players can use cheat debug and will see full cheat message
