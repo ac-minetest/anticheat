@@ -19,12 +19,14 @@
 
 
 -- SETTINGS --------------------------------------------------------------
-anticheatsettings.CHEAT_TIMESTEP = 15; -- check timestep all players 
-anticheatsettings.CHECK_AGAIN = 15; -- after player found in bad position check again after this to make sure its not lag, this should be larger than expected lag in seconds
+anticheatsettings.CHEAT_TIMESTEP = tonumber(minetest.settings:get("anticheat.timestep")) or 15; -- check timestep all players 
+anticheatsettings.CHECK_AGAIN = tonumber(minetest.settings:get("anticheat.timeagain")) or 15; -- after player found in bad position check again after this to make sure its not lag, this should be larger than expected lag in seconds
+anticheatsettings.STRING_MODERA = minetest.settings:get("anticheat.moderators") or "admin,singleplayer";
 
 -- moderators list, those players can use cheat debug and will see full cheat message
-anticheatsettings.moderators = {
-["rnd1"]=true,
-["DS"]=true,
-}
+anticheatsettings.moderators = {}
+
+for str in string.gmatch(anticheatsettings.STRING_MODERA, "([^,]+)") do table.insert(anticheatsettings.moderators, str) end
+
 -- END OF SETTINGS --------------------------------------------------------
+

@@ -1,0 +1,3 @@
+anticheat.timestep   (How many time will run checks in seconds)                                         int       15   10  300
+anticheat.timeagain  (How many seconds checks again to compare if it is cheating the suspected player)  int       120  10  300
+anticheat.moderators (Comma separated list of name players that will be not checked, without spaces)    string
