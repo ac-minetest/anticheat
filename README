@@ -30,7 +30,9 @@ features:
 	-use /cdebug to see even suspected cheats to be verified later
 	-use /watch NAME to spectate suspect/detected cheater, /unwatch to return to normal
 
-2. this mod works well with basic_vote mod. After cheater has been positively detected anyone can use /vote to kick, remove interact or kill cheater. Vote in this case is cast anonymously, under the name #anticheat.
+2. this mod works well with:
+	- basic_vote mod, use /vote to kick, remove interact or kill cheater anonymously
+	- This mod works only in minetest 0.4.16/0.4.17/4.0.X
 
 #### Configuration
 
