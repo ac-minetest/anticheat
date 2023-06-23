@@ -30,8 +30,15 @@ features:
 	-use /cdebug to see even suspected cheats to be verified later
 	-use /watch NAME to spectate suspect/detected cheater, /unwatch to return to normal
 
-managing moderators:
-	-edit names inside anticheatsettings.moderators in settings.lua
-	-Any player with kick privileges is moderator and is additionaly ignored by cheat checks. Use this for admin only - cheaters can then see who moderators are.
-	
-2. this mod works well with basic_vote mod. After cheater has been positively detected anyone can use /vote to kick, remove interact or kill cheater. Vote in this case is cast anonymously, under the name #anticheat.
+2. this mod works well with:
+	- basic_vote mod, use /vote to kick, remove interact or kill cheater anonymously
+	- This mod works only in minetest 0.4.16/0.4.17/4.0.X
+
+#### Configuration
+
+| config name          | type   | default/min/max    | Description                               |
+| -------------------- | ------ | ------------------ | ----------------------------------------- |
+| anticheat.timestep   | int    | 15 /  10 /  300    | How many time will run checks in seconds  |
+| anticheat.timeagain  | int    | 15 /  10 /  300    | How many seconds checks again to compare if it is cheating the suspected player |
+| anticheat.moderators | string | admin,singleplayer | Comma separated list of name players that will be not checked, without spaces   |
+

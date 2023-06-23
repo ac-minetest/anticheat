@@ -26,6 +26,7 @@ local CHEAT_TIMESTEP = anticheatsettings.CHEAT_TIMESTEP;
 local CHECK_AGAIN = anticheatsettings.CHECK_AGAIN;
 cheat.moderators = anticheatsettings.moderators;
 
+bonemod = minetest.get_modpath("boneworld")
 
 anticheatdb = {}; -- data about detected cheaters
 
@@ -249,7 +250,7 @@ minetest.register_globalstep(function(dtime)
 		
 		cheat.stat_timer = cheat.stat_timer + cheat.timestep; 
 		-- dig xp stats every 2 minutes
-		if boneworld and cheat.stat_timer>120 then
+		if bonemod and cheat.stat_timer>120 then
 			cheat.stat_timer = 0;
 			local players = minetest.get_connected_players();
 			for _,player in pairs(players) do
@@ -376,9 +377,11 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	
 		minetest.after(5, -- load digxp after boneworld loads it
 		function() 
-			if boneworld and boneworld.xp then
+			if bonemod then
+				if boneworld.xp then
 				cheat.players[name].stats.digxp = boneworld.digxp[name] or 0;
 				cheat.players[name].stats.state = 1;
+				end
 			end
 		end
 	)
